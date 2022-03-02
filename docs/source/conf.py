@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = '星火链开发者手册'
+copyright = '2021, 中国信息通信研究院'
+author = '中国信息通信研究院'
 
 release = '0.1'
 version = '0.1.0'
