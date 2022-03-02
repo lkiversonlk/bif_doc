@@ -1,17 +1,13 @@
-Welcome to Lumache's documentation!
+星火链应用开发者文档
 ===================================
 
-**Lumache** (/lu'make/) is a Python library for cooks and food lovers
-that creates recipes mixing random ingredients.
-It pulls data from the `Open Food Facts database <https://world.openfoodfacts.org/>`_
-and offers a *simple* and *intuitive* API.
+星火·链网-底层区块链平台(BIF-Core)，简称星火链，是中国信息通信研究院基于区块链技术打造的一条许可公有链，是实现“星火·链网”这一国家级区块链与工业互联网协同创新新型基础设施的关键技术。星火链内置了星火标识（BID，Blockchain-based IDentifier），为人、企业、设备和数字对象等提供标识注册解析、数字身份等基础服务。星火链采用“主链+子链”链群架构，主链负责链群管理、监管规则、公共数据和价值锚定，子链针对不同业务场景独立设计，可通过许可制接入主链，实现数据安全隔离、高性能运行。星火链立足安全、自主、可控的原则，面向各行业领域开源开放，赋能全行业开发者，共建生态繁荣。
 
-Check out the :doc:`usage` section for further information, including
-how to :ref:`installation` the project.
+
 
 .. note::
 
-   This project is under active development.
+   星火链正在不断更新迭代中
 
 Contents
 --------
