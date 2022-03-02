@@ -13,7 +13,9 @@ Contents
 --------
 
 .. toctree::
-
+   :maxdepth: 2
+   :caption: 星火链应用开发手册:
+   
    概述
    快速上手
    星火链开发基础
