@@ -16,3 +16,4 @@ Contents
 
    usage
    api
+   BIF_doc
