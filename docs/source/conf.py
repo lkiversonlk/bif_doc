@@ -12,6 +12,7 @@ version = '0.1.0'
 # -- General configuration
 
 extensions = [
+    'recommonmark',
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
@@ -29,7 +30,7 @@ templates_path = ['_templates']
 
 # -- Options for HTML output
 
-html_theme = 'nature'
+html_theme = 'pyramid'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
