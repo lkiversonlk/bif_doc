@@ -18,7 +18,7 @@ Contents
 
    概述
    快速上手
-   星火链开发基础
+   星火链基础知识
    星火链SDK
    星火链Javascript合约开发
    星火链Solidity合约开发

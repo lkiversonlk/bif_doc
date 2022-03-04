@@ -95,70 +95,152 @@
     BIFSDK sdk = BIFSDK.getInstance(SDK_INSTANCE_URL);   //SDK_INSTANCE_URL为星火链RPC地址
     ```
 
-### 查询账户信息
+### 账户处理接口
 
-1. 接口 `BIFAccountGetInfoRequest`
+1. 查询账户信息
 
-1. 用途:
+    1. 接口 `BIFAccountGetInfoRequest`
 
-    用来获取一个账户当前信息
+    1. 用途:
 
-1. 示例
-    ```java
-    String accountAddress = "did:bid:efnVUgqQFfYeu97ABf6sGm3WFtVXHZB2";
-    BIFAccountGetInfoRequest request = new BIFAccountGetInfoRequest();
-    request.setAddress(accountAddress);
-    // 调用getAccount接口
-    BIFAccountGetInfoResponse response = sdk.getBIFAccountService().getAccount(request);
+        用来获取一个账户当前信息
 
-    if (response.getErrorCode() == 0) {
-        System.out.println(JsonUtils.toJSONString(response.getResult()));
-    } else {
+    1. 示例
+        ```java
+        String accountAddress = "did:bid:efnVUgqQFfYeu97ABf6sGm3WFtVXHZB2";
+        BIFAccountGetInfoRequest request = new BIFAccountGetInfoRequest();
+        request.setAddress(accountAddress);
+        // 调用getAccount接口
+        BIFAccountGetInfoResponse response = sdk.getBIFAccountService().getAccount(request);
+
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+1. 获取账户nonce
+
+    1. 接口 `BIFAccountGetNonceRequest`
+
+    1. 用途:
+
+        用来获取一个账户当前nonce值, 有关nonce含义, 请参照星火链开发基础章节.
+
+    1. 示例:
+        ```java
+        String accountAddress = "did:bid:efnVUgqQFfYeu97ABf6sGm3WFtVXHZB2";
+        BIFAccountGetNonceRequest request = new BIFAccountGetNonceRequest();
+        request.setAddress(accountAddress);
+        BIFAccountGetNonceResponse response = sdk.getBIFAccountService().getNonce(request);
+        if (0 == response.getErrorCode()) {
+            System.out.println("Account nonce:" + response.getResult().getNonce());
+        }else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+1. 获取账户余额
+
+    1. 接口 `BIFAccountGetBalanceRequest`
+
+    1. 用途:
+
+        用来获取一个账户当前的XHT余额.
+
+    1. 示例:
+
+        ```java
+        String accountAddress = "did:bid:efzE8AcDgWUeNbgujA5hK3oUeuG9k19b";
+        BIFAccountGetBalanceRequest request = new BIFAccountGetBalanceRequest();
+        request.setAddress(accountAddress);
+
+        BIFAccountGetBalanceResponse response = sdk.getBIFAccountService().getAccountBalance(request);
+        if (0 == response.getErrorCode()) {
+            System.out.println("Gas balance：" + ToBaseUnit.ToGas(response.getResult().getBalance().toString()) + "Gas");
+        }else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+### Block接口
+
+1. 获取当前块高度
+
+    1. 接口 `getBlockNumber`
+
+    1. 用途:
+
+        获取当前链上最新的Block号
+
+    1. 示例:
+
+        ```java
+        BIFBlockGetNumberResponse response = sdk.getBIFBlockService().getBlockNumber();
         System.out.println(JsonUtils.toJSONString(response));
-    }
-    ```
-### 获取账户nonce
+        ```
 
-1. 接口 `BIFAccountGetNonceRequest`
+1. 获取指定块内的交易列表
 
-1. 用途:
+    1. 接口 `getTransactions(request)`
 
-    用来获取一个账户当前nonce值, 有关nonce含义, 请参照星火链开发基础章节.
+    1. 用途:
 
-1. 示例:
-    ```java
-    String accountAddress = "did:bid:efnVUgqQFfYeu97ABf6sGm3WFtVXHZB2";
-    BIFAccountGetNonceRequest request = new BIFAccountGetNonceRequest();
-    request.setAddress(accountAddress);
-    BIFAccountGetNonceResponse response = sdk.getBIFAccountService().getNonce(request);
-    if (0 == response.getErrorCode()) {
-        System.out.println("Account nonce:" + response.getResult().getNonce());
-    }else {
-        System.out.println(JsonUtils.toJSONString(response));
-    }
-    ```
+        给定block号,获取该block内的交易列表信息
 
-### 获取账户余额
+    1. 示例:
 
-1. 接口 `BIFAccountGetBalanceRequest`
+        ```java
+        Long blockNumber = 1L;
+        BIFBlockGetTransactionsRequest request = new BIFBlockGetTransactionsRequest();
+        request.setBlockNumber(blockNumber);
+        BIFBlockGetTransactionsResponse response = sdk.getBIFBlockService().getTransactions(request);
+        if (0 == response.getErrorCode()) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
 
-1. 用途:
+1. 获取指定块的统计信息
 
-    用来获取一个账户当前的XHT余额.
+    1. 接口 `getBlockInfo(request)`
 
-1. 示例:
+    1. 用途:
 
-    ```java
-    String accountAddress = "did:bid:efzE8AcDgWUeNbgujA5hK3oUeuG9k19b";
-    BIFAccountGetBalanceRequest request = new BIFAccountGetBalanceRequest();
-    request.setAddress(accountAddress);
+        给定block号, 查询指定block的信息.
 
-    BIFAccountGetBalanceResponse response = sdk.getBIFAccountService().getAccountBalance(request);
-    if (0 == response.getErrorCode()) {
-        System.out.println("Gas balance：" + ToBaseUnit.ToGas(response.getResult().getBalance().toString()) + "Gas");
-    }else {
-        System.out.println(JsonUtils.toJSONString(response));
-    }
-    ```
+    1. 示例:
 
-### 获取账户
+        ```java
+         BIFBlockGetInfoRequest blockGetInfoRequest = new BIFBlockGetInfoRequest();
+        blockGetInfoRequest.setBlockNumber(10L);
+        BIFBlockGetInfoResponse lockGetInfoResponse = sdk.getBIFBlockService().getBlockInfo(blockGetInfoRequest);
+        if (lockGetInfoResponse.getErrorCode() == 0) {
+            BIFBlockGetInfoResult lockGetInfoResult = lockGetInfoResponse.getResult();
+            System.out.println(JsonUtils.toJSONString(lockGetInfoResult));
+        } else {
+            System.out.println(JsonUtils.toJSONString(lockGetInfoResponse));
+        }
+        ```
+
+1. 查询最新块的信息
+
+    1. 接口 `getBlockLatestInfo`
+
+    1. 用途:
+
+        获取当前最新块的信息.
+
+    1. 示例:
+
+        ```java
+        BIFBlockGetLatestInfoResponse lockGetLatestInfoResponse = sdk.getBIFBlockService().getBlockLatestInfo();
+        if (lockGetLatestInfoResponse.getErrorCode() == 0) {
+            BIFBlockGetLatestInfoResult lockGetLatestInfoResult = lockGetLatestInfoResponse.getResult();
+            System.out.println(JsonUtils.toJSONString(lockGetLatestInfoResult));
+        } else {
+            System.out.println(JsonUtils.toJSONString(lockGetLatestInfoResponse));
+        }
+        ```
