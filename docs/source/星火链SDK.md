@@ -246,3 +246,203 @@
         ```
 
 ### Transaction相关接口
+
+1. 获取指定交易相关信息
+
+    1. 接口 `getTransactionInfo`
+
+    1. 用途:
+
+        获取指定交易的详细信息
+
+    1. 示例:
+
+        ```java
+        BIFTransactionGetInfoRequest request = new BIFTransactionGetInfoRequest();
+        request.setHash("8f3d53f0dfb5ae652d6ed93ca9512f57c2203fe0ffefdc7649908945ad96a730");
+        BIFTransactionGetInfoResponse response = sdk.getBIFTransactionService().getTransactionInfo(request);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+
+1. 提交交易
+
+    1. 接口 `BIFSubmit`
+
+    1. 用途:
+
+        提交交易到星火链网
+
+    1. 示例:
+
+        ```java
+        // 初始化参数
+        String senderPrivateKey = "priSPKkWVk418PKAS66q4bsiE2c4dKuSSafZvNWyGGp2sJVtXL";
+        //序列化交易
+        String serialization ="";
+        //签名
+        byte[] signBytes = PrivateKeyManager.sign(HexFormat.hexToByte(serialization), senderPrivateKey);
+        String publicKey = PrivateKeyManager.getEncPublicKey(senderPrivateKey);
+        //提交交易
+        BIFTransactionSubmitRequest submitRequest = new BIFTransactionSubmitRequest();
+        submitRequest.setSerialization(serialization);
+        submitRequest.setPublicKey(publicKey);
+        submitRequest.setSignData(HexFormat.byteToHex(signBytes));
+        // 调用bifSubmit接口
+        BIFTransactionSubmitResponse response = sdk.getBIFTransactionService().BIFSubmit(submitRequest);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println("error: " + response.getErrorDesc());
+        }
+        ```
+
+### 合约相关接口
+
+1. 部署合约
+
+    1. 接口 `contractCreate`
+
+    1. 用途:
+
+        部署合约到星火链上
+
+    1. 示例:
+
+        ```java
+        String senderAddress = "did:bid:ef21AHDJWnFfYQ3Qs3kMxo64jD2KATwBz";
+        String senderPrivateKey = "priSPKkL8XpxHiRLuNoxph2ThSbexeRUGEETprvuVHkxy2yBDp";
+        String payload = "\"use strict\";function init(bar){/*init whatever you want*/return;}function main(input){let para = JSON.parse(input);if (para.do_foo)\n            {\n              let x = {\n                \'hello\' : \'world\'\n              };\n            }\n          }\n          \n          function query(input)\n          { \n            return input;\n          }\n        ";
+        Long initBalance = ToBaseUnit.ToUGas("1");
+
+        BIFContractCreateRequest request = new BIFContractCreateRequest();
+        request.setSenderAddress(senderAddress);
+        request.setPrivateKey(senderPrivateKey);
+        request.setInitBalance(initBalance);
+        request.setPayload(payload);
+        request.setRemarks("create contract");
+        request.setType(1);
+        request.setFeeLimit(10000000000L);
+
+        // 调用bifContractCreate接口
+        BIFContractCreateResponse response = sdk.getBIFContractService().contractCreate(request);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+1. 从部署交易中获取合约地址
+
+    1. 接口 `getContractAddress`
+
+    1. 用途:
+
+        提供部署合约的交易哈希, 返回合约地址
+
+    1. 示例
+
+        ```java
+        // Init request
+        String hash = "ff6a9d1a0c0011fbb9f51cfb99e4cd5e7c31380046fda3fd6e0daae44d1d4648";
+        BIFContractGetAddressRequest request = new BIFContractGetAddressRequest();
+        request.setHash(hash);
+
+        // Call getAddress
+        BIFContractGetAddressResponse response = sdk.getBIFContractService().getContractAddress(request);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+1. 获取合约相关信息
+
+    1. 接口 `getContractInfo`
+
+    1. 用途:
+
+        指定合约地址, 获取合约相关信息.
+
+    1. 示例
+
+        ```java
+        // Init request
+        BIFContractGetInfoRequest request = new BIFContractGetInfoRequest();
+        request.setContractAddress("did:bid:efiBacNvVSnr5QxgB282XGWkg4RXLLxL");
+
+        // Call getContractInfo
+        BIFContractGetInfoResponse response = sdk.getBIFContractService().getContractInfo(request);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
+
+1. 查询合约
+
+    1. 接口 `contractQuery`
+
+    1. 用途:
+
+        调用合约Query接口, 查询合约数据
+
+    1. 示例:
+
+        ```java
+        // Init variable
+        // Contract address
+        String contractAddress = "did:bid:ef2gAT82SGdnhj87wQWb9suPKLbnk9NP";
+
+        // Init request
+        BIFContractCallRequest request = new BIFContractCallRequest();
+        request.setContractAddress(contractAddress);
+
+        // Call contractQuery
+        BIFContractCallResponse response = sdk.getBIFContractService().contractQuery(request);
+        if (response.getErrorCode() == 0) {
+            BIFContractCallResult result = response.getResult();
+            System.out.println(JsonUtils.toJSONString(result));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }  
+        ```
+
+1. 调用合约
+
+    1. 接口 `contractInvoke`
+
+    1. 用途:
+
+        在链上发出交易调用合约可写接口
+
+    1. 示例:
+
+        ```java
+        String senderAddress = "did:bid:efVmotQW28QDtQyupnKTFvpjKQYs5bxf";
+        String contractAddress = "did:bid:ef2gAT82SGdnhj87wQWb9suPKLbnk9NP";
+        String senderPrivateKey = "priSPKnDue7AJ42gt7acy4AVaobGJtM871r1eukZ2M6eeW5LxG";
+        Long amount = 0L;
+
+        BIFContractInvokeRequest request = new BIFContractInvokeRequest();
+        request.setSenderAddress(senderAddress);
+        request.setPrivateKey(senderPrivateKey);
+        request.setContractAddress(contractAddress);
+        request.setBIFAmount(amount);
+        request.setRemarks("contract invoke");
+
+        // 调用 bifContractInvoke 接口
+        BIFContractInvokeResponse response = sdk.getBIFContractService().contractInvoke(request);
+        if (response.getErrorCode() == 0) {
+            System.out.println(JsonUtils.toJSONString(response.getResult()));
+        } else {
+            System.out.println(JsonUtils.toJSONString(response));
+        }
+        ```
