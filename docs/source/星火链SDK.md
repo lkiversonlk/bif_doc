@@ -164,7 +164,7 @@
         }
         ```
 
-### Block接口
+### Block相关接口
 
 1. 获取当前块高度
 
@@ -244,3 +244,5 @@
             System.out.println(JsonUtils.toJSONString(lockGetLatestInfoResponse));
         }
         ```
+
+### Transaction相关接口
